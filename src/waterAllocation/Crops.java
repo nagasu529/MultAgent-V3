@@ -47,6 +47,10 @@ public class Crops extends SelectApp
     public List<String> list = new ArrayList<String>();
     public String[] calculationArray;
 
+    //Acution method
+    public double extimatedProfit;
+    public double profitAfterReduction;
+
     ArrayList<Double> order = new ArrayList<Double>();		//order array
     ArrayList<String> calList = new ArrayList<String>();	//Crop list Data
     // New list initialization
@@ -446,5 +450,11 @@ public class Crops extends SelectApp
         public void setCropEU(double cropEU){
             this.cropEU = cropEU;
         }
+    }
+
+    //Profit Function and making decision about selling and buying water from others.
+
+    public void profitFunction(double revenueValue, double waterReq, double waterReduction){
+
     }
 }
