@@ -27,14 +27,15 @@ public class SelectApp {
     public double KcValue = 0.0;
     public double KcBased = 0.0;
     public double irrigationRate = 0.0;
+    public double grossMaginValue = 0.0;
 
     //Database connect for calculationg ET0
     private Connection connect(){
         //SQlite connietion string
 
-        String url = "jdbc:sqlite:/Users/kitti.ch/Dropbox/PhD-Lincoln/javaProgram/DBandText/db/FarmDB.sqlite"; //Macbook
+        //String url = "jdbc:sqlite:/Users/kitti.ch/Dropbox/PhD-Lincoln/javaProgram/DBandText/db/FarmDB.sqlite"; //Macbook
         //String url = "jdbc:sqlite:C:/Users/chiewchk/Dropbox/PhD-Lincoln/javaProgram/DBandText/db/FarmDB.sqlite";  //Office
-        //String url = "jdbc:sqlite:F:/Dropbox/PhD-Lincoln/javaProgram/DBandText/db/FarmDB.sqlite"; //Home PC
+        String url = "jdbc:sqlite:F:/Dropbox/PhD-Lincoln/javaProgram/DBandText/db/FarmDB.sqlite"; //Home PC
         Connection conn = null;
         try {
             conn = DriverManager.getConnection(url);
@@ -186,7 +187,26 @@ public class SelectApp {
 
             tmp = rs.getDouble("FWValue");
             irrigationRate = tmp;
-            //System.out.println("The irrigation type is "+ IrrigationType + "and value is " + tmp);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //Gross margin from database
+    public void getGrossMarginValue(String cropName){
+        grossMaginValue = 0.0;
+        String sql = "select GrossMarginHa FROM Duration where cropName=?";
+        double tmp = 0.0;
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt  = conn.prepareStatement(sql)){
+
+            // set the value
+            pstmt.setString(1,cropName);
+            //
+            ResultSet rs  = pstmt.executeQuery();
+
+            tmp = rs.getDouble("GrossMarginHa");
+            grossMaginValue = tmp;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
