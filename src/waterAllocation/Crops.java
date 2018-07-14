@@ -25,9 +25,15 @@ public class Crops extends SelectApp
     //Calculation factors
     public double plotSize;
     public int cropStage;
-    public int cropValue;
     public int droughtSensitivity;
     public int soilType;
+
+    //Addiditional factor for water consent cost calculation
+    public double waterConsentCost;
+    public double totalCropProducValue;
+    public double profitBeforeReduction;
+    public double profitAfterReduction;
+
     // We can use ET calculated function which are provided by FAO database.
     public double ET;
     public double cropKCoefficient;
@@ -46,10 +52,6 @@ public class Crops extends SelectApp
     public double totalWaterReq;
     public List<String> list = new ArrayList<String>();
     public String[] calculationArray;
-
-    //Acution method
-    public double extimatedProfit;
-    public double profitAfterReduction;
 
     ArrayList<Double> order = new ArrayList<Double>();		//order array
     ArrayList<String> calList = new ArrayList<String>();	//Crop list Data
@@ -79,11 +81,13 @@ public class Crops extends SelectApp
         farmName = infoarray[0];
         district = infoarray[1];
         farmSize = infoarray[2];
+        waterConsentCost = Double.parseDouble(infoarray[3]);
         System.out.println("Textfile reading finished");
         System.out.println("\n");
         for(String c:list){
             System.out.println(c);
         }
+
         System.out.println("\n");
     }
 
@@ -147,6 +151,8 @@ public class Crops extends SelectApp
             calcSTValue();
             calcDSValue();
             calcCVValue();
+            //Adding groosMargin fuction to calculate profit and margin on farm for making decision
+
             //calcCropEU();
             calcWaterRequirement();
             calcSoilMoistureValue(15, 30);
@@ -229,6 +235,9 @@ public class Crops extends SelectApp
         }
     }
 
+    public void calTotalProfit(){
+
+    }
     public void calcWaterRequirement()
     {
         double mmPerDay;
@@ -285,6 +294,12 @@ public class Crops extends SelectApp
     public void calcCVValue(){
         cvValue = (plotSize*yieldAmount)*pricePerKg;
         cv.add(cvValue);
+        totalCropProducValue = totalCropProducValue + cvValue;
+
+    }
+
+    public void calcGroosMargin(double farmProductionValue, double waterConsentCost, double outputVariable){
+        profitBeforeReduction = farmProductionValue - waterConsentCost;
     }
 
     public void calcCropEU(){
