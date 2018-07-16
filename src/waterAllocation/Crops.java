@@ -50,6 +50,7 @@ public class Crops extends SelectApp
     public double literPerSecHec;
     public double waterReduction;
     public double totalWaterReq;
+    public double productValueLost;
     public List<String> list = new ArrayList<String>();
     public String[] calculationArray;
 
@@ -152,14 +153,14 @@ public class Crops extends SelectApp
             calcDSValue();
             calcCVValue();
             //Adding groosMargin fuction to calculate profit and margin on farm for making decision
-
+            calcGroosMargin(totalCropProducValue,waterConsentCost, profitBeforeReduction);
             //calcCropEU();
             calcWaterRequirement();
             calcSoilMoistureValue(15, 30);
             calcWaterReqWithSoil();
             totalWaterReq();
             cropType xx = new cropType(cropEU, cropName, cropStage, droughtSensitivity, dsValue, stValue,
-                    cvValue, literPerSecHec, waterReq, soilWaterContainValue, waterReqWithSoil, cropKCoefficient, waterReduction);
+                    cvValue, literPerSecHec, waterReq, soilWaterContainValue, waterReqWithSoil, cropKCoefficient, waterReduction, productValueLost);
             //adding multi value list
             cropT.add(xx);
 
@@ -225,6 +226,7 @@ public class Crops extends SelectApp
             calcDSValue();
             calcCVValue();
             calcCropEU();
+            productValueLost = 0;
             calcWaterRequirement();
             totalWaterReq();
 
@@ -299,7 +301,11 @@ public class Crops extends SelectApp
     }
 
     public void calcGroosMargin(double farmProductionValue, double waterConsentCost, double outputVariable){
-        profitBeforeReduction = farmProductionValue - waterConsentCost;
+        outputVariable = farmProductionValue - waterConsentCost;
+    }
+
+    public void calcProductValueLost(double waterreductionMM, double cropProductValue, double cropWaterReq, double outputVariable){
+        outputVariable = (waterreductionMM * cropProductValue)/cropWaterReq;
     }
 
     public void calcCropEU(){
@@ -338,7 +344,7 @@ public class Crops extends SelectApp
                     */
                 int x = order.indexOf(st.cropEU);
                 cropType xx = new cropType(st.cropEU, st.cropName, st.cropStage, st.droubhtSensitivity, st.dsValue, st.stValue,
-                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReqWithSoil, st.cropCoefficient, st.waterReduction);
+                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReqWithSoil, st.cropCoefficient, st.waterReduction, st.productValueLost);
                 resultList.add(x, xx);
             }
         }
@@ -353,7 +359,7 @@ public class Crops extends SelectApp
                 Collections.sort(order);
                 int x = order.indexOf(st.cropEU);
                 cropType xx = new cropType(st.cropEU, st.cropName, st.cropStage, st.droubhtSensitivity, st.dsValue, st.stValue,
-                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReduction, st.cropCoefficient, st.waterReduction);
+                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReduction, st.cropCoefficient, st.waterReduction, st.productValueLost);
                 resultList.add(x, xx);
             }
         }
@@ -369,7 +375,7 @@ public class Crops extends SelectApp
                 Collections.sort(order);
                 int x = order.indexOf(st.cropEU);
                 cropType xx = new cropType(st.cropEU, st.cropName, st.cropStage, st.droubhtSensitivity, st.dsValue, st.stValue,
-                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReqWithSoil, st.cropCoefficient, st.waterReduction);
+                        st.cvValue, st.literPerSecHec, st.waterReq, st.soilWaterContainValue, st.waterReqWithSoil, st.cropCoefficient, st.waterReduction, st.productValueLost);
                 resultList.add(x, xx);
             }
         }
@@ -423,7 +429,10 @@ public class Crops extends SelectApp
                 ct.waterReduction = ct.waterReqWithSoil*0.1;
                 totalReduction = totalReduction + ct.waterReduction;
             }
+
+            //calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
         }
+
 
         return totalReduction;
     }
@@ -442,8 +451,9 @@ public class Crops extends SelectApp
         double waterReqWithSoil;
         double cropCoefficient;
         double waterReduction;
+        double productValueLost;
 
-        cropType(double cropEU, String cropName, int cropStage, int droubhtSensitivity, double dsValue, double stValue, double cvValue, double literPerSecHec, double waterReq, double soilWaterContainValue, double waterReqWithSoil, double cropCoefficient, double waterReduction) {
+        cropType(double cropEU, String cropName, int cropStage, int droubhtSensitivity, double dsValue, double stValue, double cvValue, double literPerSecHec, double waterReq, double soilWaterContainValue, double waterReqWithSoil, double cropCoefficient, double waterReduction, double productValueLost) {
             this.cropEU = cropEU;
             this.cropName = cropName;
             this.cropStage = cropStage;
@@ -457,6 +467,7 @@ public class Crops extends SelectApp
             this.waterReqWithSoil = waterReqWithSoil;
             this.cropCoefficient = cropCoefficient;
             this.waterReduction = waterReduction;
+            this.productValueLost = productValueLost;
         }
 
         public double getCropEU(){
