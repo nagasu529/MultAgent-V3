@@ -187,7 +187,7 @@ public class Farmer extends Agent{
                     resultCal.append(st.cropName + " " + st.cropStage +
                             " " + st.droubhtSensitivity + " " + df.format(st.dsValue) + " " + df.format(st.stValue) + " " + df.format(st.cvValue) +
                             " " + df.format(st.literPerSecHec) + " " + df.format(st.waterReq) + " " + df.format(st.soilWaterContainValue) + " " + df.format(st.waterReqWithSoil) +
-                            " " + df.format(st.cropCoefficient) + " " + df.format(st.waterReduction) + df.format(st.productValueLost) + "\n");
+                            " " + df.format(st.cropCoefficient) + " " + df.format(st.waterReduction) + " " + df.format(st.productValueLost) + "\n");
                 }
                 //System.out.println("Actual reduction is: " + actualReduction);
                 resultCal.append("Actual reduction is: " + actualReduction + "\n");

@@ -144,7 +144,7 @@ public class Crops extends SelectApp
             cropKCoefficient = KcValue;
             //System.out.println("KcStage value is: "+KcStageValue);
 
-            /**
+            /*
              *
              * Evapotranspiration calculation process
              *
@@ -152,13 +152,12 @@ public class Crops extends SelectApp
             calcSTValue();
             calcDSValue();
             calcCVValue();
-            //Adding groosMargin fuction to calculate profit and margin on farm for making decision
-            calcGroosMargin(totalCropProducValue,waterConsentCost, profitBeforeReduction);
             //calcCropEU();
             calcWaterRequirement();
             calcSoilMoistureValue(15, 30);
             calcWaterReqWithSoil();
             totalWaterReq();
+            productValueLost = 10;
             cropType xx = new cropType(cropEU, cropName, cropStage, droughtSensitivity, dsValue, stValue,
                     cvValue, literPerSecHec, waterReq, soilWaterContainValue, waterReqWithSoil, cropKCoefficient, waterReduction, productValueLost);
             //adding multi value list
@@ -168,6 +167,8 @@ public class Crops extends SelectApp
         }
 
         calcCropEU();
+        //Adding groosMargin fuction to calculate profit and margin on farm for making decision
+        calcGroosMargin(totalCropProducValue,waterConsentCost, profitBeforeReduction);
     }
 
     public void farmFactorValuesText(){
@@ -226,7 +227,6 @@ public class Crops extends SelectApp
             calcDSValue();
             calcCVValue();
             calcCropEU();
-            productValueLost = 0;
             calcWaterRequirement();
             totalWaterReq();
 
@@ -238,8 +238,8 @@ public class Crops extends SelectApp
     }
 
     public void calTotalProfit(){
-
     }
+
     public void calcWaterRequirement()
     {
         double mmPerDay;
@@ -304,8 +304,8 @@ public class Crops extends SelectApp
         outputVariable = farmProductionValue - waterConsentCost;
     }
 
-    public void calcProductValueLost(double waterreductionMM, double cropProductValue, double cropWaterReq, double outputVariable){
-        outputVariable = (waterreductionMM * cropProductValue)/cropWaterReq;
+    public void calcProductValueLost(double waterReductionMM, double cropProductValue, double cropWaterReq, double outputVariable){
+        outputVariable = (waterReductionMM * cropProductValue)/cropWaterReq;
     }
 
     public void calcCropEU(){
@@ -404,33 +404,47 @@ public class Crops extends SelectApp
             if (ct.cropName.equals("Pasture")&& ct.cropStage==1) {
                 ct.waterReduction = ct.waterReqWithSoil * 0.5;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else if (ct.cropName.equals("pasture") && ct.cropStage==2) {
                 ct.waterReduction = ct.waterReqWithSoil*0.2;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else if (ct.cropName.equals("Pasture") && ct.cropStage==3) {
                 ct.waterReduction = ct.waterReqWithSoil*0.1;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else if (ct.cropStage==1) {
                 ct.waterReduction = ct.waterReqWithSoil*0.5;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else if (ct.cropStage==2) {
                 ct.waterReduction = ct.waterReqWithSoil*0.2;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else if (ct.cropStage==3) {
                 ct.waterReduction = ct.waterReqWithSoil*0.15;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
             else{
                 ct.waterReduction = ct.waterReqWithSoil*0.1;
                 totalReduction = totalReduction + ct.waterReduction;
+                calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+                System.out.println(ct.productValueLost + " " + ct.waterReduction + " " + ct.cvValue + " " + ct.waterReqWithSoil);
             }
 
-            //calcProductValueLost(ct.waterReduction, ct.cvValue, ct.waterReqWithSoil, ct.productValueLost);
+
         }
 
 
